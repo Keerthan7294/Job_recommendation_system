@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobVerse — Login</title>
+    <meta name="description"
+        content="Login or register to access MatchMe, your zero-keyboard job recommendation portal.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #a3eef1;
+            --surface: rgba(255, 255, 255, 0.85);
+            --primary: #8c9a87;
+            --primary-hover: #7b8875;
+            --primary-glow: rgba(1, 213, 255, 0.3);
+            --text-1: #4a4a4a;
+
+            --text-2: #737373;
+            --border: rgba(0, 0, 0, 0.06);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --danger: #d94f4f;
+            --success: #5a9a6e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-1);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            background-image:
+                radial-gradient(circle at 20% 40%, rgba(220, 210, 190, 0.5), transparent 35%),
+                radial-gradient(circle at 80% 60%, rgba(180, 195, 185, 0.5), transparent 35%);
+            background-attachment: fixed;
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 440px;
+            background: var(--surface);
+            backdrop-filter: blur(14px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2.5rem 2.25rem 2rem;
+            box-shadow: 0 16px 48px -12px rgba(0, 0, 0, 0.08);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .auth-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #4c0505, #9ca998);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+        }
+
+        .auth-header .badge {
+            font-size: 0.7rem;
+            padding: 0.15rem 0.5rem;
+            background: rgba(140, 154, 135, 0.15);
+            color: #6b7a66;
+            border-radius: 10px;
+            border: 1px solid rgba(140, 154, 135, 0.2);
+            -webkit-text-fill-color: #6b7a66;
+        }
+
+        .auth-header p {
+            margin-top: 0.4rem;
+            font-size: 0.95rem;
+            color: var(--text-2);
+        }
+
+        .tab-bar {
+            display: flex;
+            background: rgba(0, 0, 0, 0.03);
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 1.75rem;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 0.6rem;
+            border: none;
+            border-radius: 10px;
+            background: transparent;
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-2);
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .tab-btn.active {
+            background: #fff;
+            color: var(--text-1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+            animation: fadeIn 0.35s ease;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--text-2);
+            margin-bottom: 0.4rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.7);
+            font-family: inherit;
+            font-size: 0.95rem;
+            color: var(--text-1);
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-glow);
+        }
+
+        .form-group input::placeholder {
+            color: #b5b5b5;
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 0.85rem;
+            border: none;
+            border-radius: 12px;
+            background: var(--primary);
+            color: #fff;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-btn:hover {
+            background: var(--primary-hover);
+            box-shadow: 0 6px 20px var(--primary-glow);
+            transform: translateY(-2px);
+        }
+
+        .auth-btn:active {
+            transform: translateY(0);
+        }
+
+        .auth-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 1.5rem 0 0.5rem;
+            color: var(--text-2);
+            font-size: 0.78rem;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .toast {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            padding: 0.85rem 1.25rem;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #fff;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            transform: translateX(120%);
+            transition: transform 0.4s cubic-bezier(.4, .0, .2, 1);
+            z-index: 999;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.success {
+            background: var(--success);
+        }
+
+        .toast.error {
+            background: var(--danger);
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 1.25rem;
+            font-size: 0.82rem;
+            color: var(--text-2);
+        }
+
+        .auth-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .pw-strength {
+            height: 4px;
+            border-radius: 2px;
+            background: var(--border);
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .pw-strength-bar {
+            height: 100%;
+            width: 0%;
+            border-radius: 2px;
+            transition: width 0.35s ease, background 0.35s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="auth-card" id="authCard">
+        <div class="auth-header">
+            <h1>JobVerse <span class="badge">PRO</span></h1>
+            <p>Your Gateway to Build Careers </p>
+        </div>
+        <div class="tab-bar">
+            <button class="tab-btn active" id="loginTab" data-tab="login">Login</button>
+            <button class="tab-btn" id="registerTab" data-tab="register">Register</button>
+        </div>
+        <form class="auth-form active" id="loginForm">
+            <div class="form-group">
+                <label for="loginUsername">Username</label>
+                <input type="text" id="loginUsername" placeholder="Enter your username" required
+                    autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" placeholder="Enter your password" required
+                    autocomplete="current-password">
+            </div>
+            <button type="submit" class="auth-btn" id="loginBtn">Sign In</button>
+            <div class="auth-footer">
+                <p>Don't have an account? <a id="switchToRegister">Create one</a></p>
+            </div>
+        </form>
+        <form class="auth-form" id="registerForm">
+            <div class="form-group">
+                <label for="regUsername">Username</label>
+                <input type="text" id="regUsername" placeholder="Choose a username" required minlength="3"
+                    autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label for="regEmail">Email</label>
+                <input type="email" id="regEmail" placeholder="you@example.com" required autocomplete="email">
+            </div>
+            <div class="form-group">
+                <label for="regPassword">Password</label>
+                <input type="password" id="regPassword" placeholder="Min. 6 characters" required minlength="6"
+                    autocomplete="new-password">
+                <div class="pw-strength">
+                    <div class="pw-strength-bar" id="pwBar"></div>
+                </div>
+            </div>
+            <button type="submit" class="auth-btn" id="registerBtn">Create Account</button>
+            <div class="auth-footer">
+                <p>Already have an account? <a id="switchToLogin">Sign in</a></p>
+            </div>
+        </form>
+    </div>
+    <div class="toast" id="toast"></div>
+    <script src="login.js"></script>
+</body>
+
+</html>
